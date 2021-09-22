@@ -8,16 +8,19 @@
         <title>Punchclock Client</title>
         <link rel="stylesheet" type="text/css" href="style.css" />
         <script src="script.js" type="application/javascript"></script>
+        <script src="moment.js" type="application/javascript"></script>
     </head>
     <body>
         <form id="createEntryForm">
+            <input type="hidden" name="id">
             <label for="checkIn">Check in</label>
             <input type="date" name="checkInDate" id="checkIn" required>
             <input type="time" name="checkInTime" required>
             <label for="checkOut">Check out</label>
             <input type="date" name="checkOutDate" id="checkOut" required>
             <input type="time" name="checkOutTime" required>
-            <input type="submit" value="Save" />
+            <input type="submit" value="Save" id="saveButton"/>
+            <button class="hidden" id="clearButton" onclick="clearUpdate()">Clear</button>
         </form>
         <table>
             <thead>
