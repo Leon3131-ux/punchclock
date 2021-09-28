@@ -2,6 +2,7 @@ package ch.zli.m223.punchclock.controller;
 
 import ch.zli.m223.punchclock.converter.EntryDtoConverter;
 import ch.zli.m223.punchclock.domain.Entry;
+import ch.zli.m223.punchclock.domain.PermissionName;
 import ch.zli.m223.punchclock.domain.User;
 import ch.zli.m223.punchclock.dto.EntryDto;
 import ch.zli.m223.punchclock.service.EntryService;
@@ -52,7 +53,7 @@ public class EntryController {
         if(entryDto.getId() != null && entryDto.getId() != 0){
             Entry entry = entryDtoConverter.toEntity(entryDto, user);
             Optional<Entry> oldEntry = entryService.findById(entryDto.getId());
-            if(oldEntry.isPresent() && oldEntry.get().getUser().equals(user)){
+            if(oldEntry.isPresent() && entryService.isAllowedToManage(oldEntry.get(), user)){
                 return new ResponseEntity<>(entryDtoConverter.toDto(entryService.updateEntry(oldEntry.get(), entry)), HttpStatus.OK);
             }
         }
@@ -63,7 +64,7 @@ public class EntryController {
     public ResponseEntity<?> deleteEntry(@PathVariable("id") Long id, Principal principal){
         User user = userService.getByUsernameOrElseThrow(principal.getName());
         Optional<Entry> oldEntry = entryService.findById(id);
-        if(oldEntry.isPresent() && oldEntry.get().getUser().equals(user)){
+        if(oldEntry.isPresent() && entryService.isAllowedToManage(oldEntry.get(), user)){
             entryService.deleteEntry(oldEntry.get());
             return new ResponseEntity<>(HttpStatus.OK);
         }else {

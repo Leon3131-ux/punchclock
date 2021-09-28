@@ -28,4 +28,8 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Permission> permissions;
 
+    public boolean hasPermission(PermissionName permissionName){
+       return permissions.stream().anyMatch(permission -> permission.getName().equals(permissionName));
+    }
+
 }

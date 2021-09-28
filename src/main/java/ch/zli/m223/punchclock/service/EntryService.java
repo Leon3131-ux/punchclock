@@ -1,6 +1,8 @@
 package ch.zli.m223.punchclock.service;
 
 import ch.zli.m223.punchclock.domain.Entry;
+import ch.zli.m223.punchclock.domain.PermissionName;
+import ch.zli.m223.punchclock.domain.User;
 import ch.zli.m223.punchclock.repository.EntryRepository;
 import org.springframework.stereotype.Service;
 
@@ -36,4 +38,12 @@ public class EntryService {
     public Optional<Entry> findById(Long id){
         return entryRepository.findById(id);
     }
+
+    public boolean isAllowedToManage(Entry entry, User user){
+        if(entry.getUser().equals(user)) return true;
+        return user.hasPermission(PermissionName.ADMINISTRATE)
+                || user.hasPermission(PermissionName.SUPER_ADMINISTRATE);
+    }
+
 }
+
