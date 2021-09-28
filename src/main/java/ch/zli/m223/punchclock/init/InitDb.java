@@ -25,7 +25,28 @@ public class InitDb {
     @PostConstruct
     public void initDb(){
         List<Permission> permissions = initPermissions();
+        initSuperAdmin(permissions);
         initAdmin(permissions);
+    }
+
+    private void initSuperAdmin(List<Permission> permissions){
+        Optional<Permission> superAdminPermission = permissions.stream()
+                .filter(
+                        permission ->
+                                permission
+                                        .getName()
+                                        .equals(PermissionName.SUPER_ADMINISTRATE)
+                ).findFirst();
+        if(superAdminPermission.isPresent()){
+            User user = new User(
+                    0L,
+                    "superadmin",
+                    bCryptPasswordEncoder.encode("superadmin"),
+                    null,
+                    List.of(superAdminPermission.get())
+            );
+            userRepository.save(user);
+        }
     }
 
     private void initAdmin(List<Permission> permissions){
@@ -34,7 +55,7 @@ public class InitDb {
                         permission ->
                                 permission
                                         .getName()
-                                        .equals(PermissionName.SUPER_ADMINISTRATE)
+                                        .equals(PermissionName.ADMINISTRATE)
                 ).findFirst();
         if(adminPermission.isPresent()){
             User user = new User(
