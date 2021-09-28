@@ -18,6 +18,15 @@ public class CompanyService {
         return companyRepository.saveAndFlush(company);
     }
 
+    public Company updateCompany(Company oldCompany, Company newCompany){
+        oldCompany.setName(newCompany.getName());
+        return companyRepository.saveAndFlush(oldCompany);
+    }
+
+    public void deleteCompany(Company company){
+        companyRepository.delete(company);
+    }
+
     public List<Company> getCompanies(){
         return companyRepository.findAll();
     }
