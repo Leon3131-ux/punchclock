@@ -1,43 +1,43 @@
 package ch.zli.m223.punchclock.controller;
 
+import ch.zli.m223.punchclock.converter.EntryDtoConverter;
 import ch.zli.m223.punchclock.domain.Entry;
+import ch.zli.m223.punchclock.domain.User;
+import ch.zli.m223.punchclock.dto.EntryDto;
 import ch.zli.m223.punchclock.service.EntryService;
+import ch.zli.m223.punchclock.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequiredArgsConstructor
 public class EntryController {
-    private EntryService entryService;
 
-    public EntryController(EntryService entryService) {
-        this.entryService = entryService;
+    private final EntryService entryService;
+    private final EntryDtoConverter entryDtoConverter;
+    private final UserService userService;
+
+
+    @GetMapping("/api/entries")
+    public List<EntryDto> getAllEntries() {
+        return entryDtoConverter.convertAll(entryService.findAll());
     }
 
-    @GetMapping("/entries")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Entry> getAllEntries() {
-        return entryService.findAll();
-    }
-
-    @PostMapping("/entry")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Entry createEntry(@Valid @RequestBody Entry entry) {
-        return entryService.createEntry(entry);
-    }
-
-    @RequestMapping(value = "/entry", method = RequestMethod.PUT)
-    public ResponseEntity<?> updateEntry(@Valid @RequestBody Entry entry){
-        Optional<Entry> oldEntry = entryService.findById(entry.getId());
-        if(oldEntry.isPresent()){
-            return new ResponseEntity<>(entryService.updateEntry(oldEntry.get(), entry), HttpStatus.OK);
-        }else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    @RequestMapping(value = "/api/entry", method = RequestMethod.POST)
+    public ResponseEntity<?> createEntry(@Valid @RequestBody EntryDto entryDto, Principal principal){
+        User user = userService.getByUsernameOrElseThrow(principal.getName());
+        if(entryDto.getId() == null || entryDto.getId() == 0){
+            Entry entry = entryDtoConverter.toEntity(entryDto, user);
+            return new ResponseEntity<>(entryDtoConverter.toDto(entryService.createEntry(entry)), HttpStatus.CREATED);
         }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/entry/{id}", method = RequestMethod.DELETE)

@@ -27,6 +27,7 @@ public class InitDb {
         List<Permission> permissions = initPermissions();
         initSuperAdmin(permissions);
         initAdmin(permissions);
+        initUser();
     }
 
     private void initSuperAdmin(List<Permission> permissions){
@@ -67,6 +68,17 @@ public class InitDb {
             );
             userRepository.save(user);
         }
+    }
+
+    private void initUser(){
+        User user = new User(
+                0L,
+                "user",
+                bCryptPasswordEncoder.encode("user"),
+                null,
+                new ArrayList<>()
+        );
+        userRepository.save(user);
     }
 
     private List<Permission> initPermissions(){
