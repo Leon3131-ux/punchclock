@@ -33,8 +33,14 @@ public class EntryController {
 
 
     @GetMapping("/api/entries")
-    public List<EntryDto> getAllEntries() {
-        return entryDtoConverter.convertAll(entryService.findAll());
+    public List<EntryDto> getAllEntries(Principal principal) {
+        User user = userService.getByUsernameOrElseThrow(principal.getName());
+        if(user.hasPermission(PermissionName.ADMINISTRATE) || user.hasPermission(PermissionName.SUPER_ADMINISTRATE)){
+            return entryDtoConverter.convertAll(entryService.getAll());
+        }else {
+            return entryDtoConverter.convertAll(entryService.getAllByUser(user));
+        }
+
     }
 
     @RequestMapping(value = "/api/entry", method = RequestMethod.POST)
@@ -52,7 +58,7 @@ public class EntryController {
         User user = userService.getByUsernameOrElseThrow(principal.getName());
         if(entryDto.getId() != null && entryDto.getId() != 0){
             Entry entry = entryDtoConverter.toEntity(entryDto, user);
-            Optional<Entry> oldEntry = entryService.findById(entryDto.getId());
+            Optional<Entry> oldEntry = entryService.getById(entryDto.getId());
             if(oldEntry.isPresent() && entryService.isAllowedToManage(oldEntry.get(), user)){
                 return new ResponseEntity<>(entryDtoConverter.toDto(entryService.updateEntry(oldEntry.get(), entry)), HttpStatus.OK);
             }
@@ -63,7 +69,7 @@ public class EntryController {
     @RequestMapping(value = "/api/entry/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteEntry(@PathVariable("id") Long id, Principal principal){
         User user = userService.getByUsernameOrElseThrow(principal.getName());
-        Optional<Entry> oldEntry = entryService.findById(id);
+        Optional<Entry> oldEntry = entryService.getById(id);
         if(oldEntry.isPresent() && entryService.isAllowedToManage(oldEntry.get(), user)){
             entryService.deleteEntry(oldEntry.get());
             return new ResponseEntity<>(HttpStatus.OK);

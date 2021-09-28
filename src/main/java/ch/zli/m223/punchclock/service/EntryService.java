@@ -31,11 +31,15 @@ public class EntryService {
         entryRepository.delete(entry);
     }
 
-    public List<Entry> findAll() {
+    public List<Entry> getAll() {
         return entryRepository.findAll();
     }
 
-    public Optional<Entry> findById(Long id){
+    public List<Entry> getAllByUser(User user){
+        return entryRepository.findAllByUser(user);
+    }
+
+    public Optional<Entry> getById(Long id){
         return entryRepository.findById(id);
     }
 
