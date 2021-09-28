@@ -4,14 +4,15 @@ import ch.zli.m223.punchclock.converter.CompanyDtoConverter;
 import ch.zli.m223.punchclock.domain.Company;
 import ch.zli.m223.punchclock.dto.CompanyDto;
 import ch.zli.m223.punchclock.service.CompanyService;
+import ch.zli.m223.punchclock.validator.CompanyValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.ws.rs.PathParam;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +22,10 @@ public class CompanyController {
 
     private final CompanyService companyService;
     private final CompanyDtoConverter companyDtoConverter;
+    private final CompanyValidator companyValidator;
+
+    @InitBinder("companyDto")
+    public void setCompanyDtoBinder(WebDataBinder binder){binder.setValidator(companyValidator);}
 
     @PreAuthorize("hasAnyAuthority('SUPER_ADMINISTRATE')")
     @RequestMapping(value = "/api/companies", method = RequestMethod.GET)
