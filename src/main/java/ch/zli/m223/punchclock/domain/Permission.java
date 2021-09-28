@@ -1,16 +1,15 @@
 package ch.zli.m223.punchclock.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class Permission {
 
     @Id
@@ -21,7 +20,7 @@ public class Permission {
     @Column(nullable = false, unique = true)
     private PermissionName name;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<User> users;
 
 }
