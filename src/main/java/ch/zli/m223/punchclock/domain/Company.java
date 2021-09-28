@@ -8,25 +8,19 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class User {
+public class Company {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String username;
+    private String name;
 
-    @Column(nullable = false)
-    private String password;
-
-    @ManyToOne
-    private Company company;
-
-    @ManyToMany
-    private List<Permission> permissions;
+    @OneToMany(mappedBy = "company")
+    private List<User> users;
 
 }

@@ -8,25 +8,20 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class User {
+public class Permission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String username;
-
-    @Column(nullable = false)
-    private String password;
-
-    @ManyToOne
-    private Company company;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, unique = true)
+    private PermissionName name;
 
     @ManyToMany
-    private List<Permission> permissions;
+    private List<User> users;
 
 }

@@ -19,12 +19,12 @@ public class Entry {
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalDateTime checkIn;
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalDateTime checkOut;
 
     @ManyToOne
