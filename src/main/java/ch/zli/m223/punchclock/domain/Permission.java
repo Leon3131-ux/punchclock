@@ -20,7 +20,4 @@ public class Permission {
     @Column(nullable = false, unique = true)
     private PermissionName name;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<User> users;
-
 }

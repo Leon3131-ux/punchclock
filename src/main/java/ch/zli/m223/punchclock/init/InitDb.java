@@ -90,7 +90,7 @@ public class InitDb {
     private List<Permission> initPermissions(){
         List<Permission> permissions = new ArrayList<>();
         for(PermissionName permissionName : PermissionName.values()){
-            permissions.add(permissionRepository.save(new Permission(0L, permissionName, new ArrayList<>())));
+            permissions.add(permissionRepository.save(new Permission(0L, permissionName)));
         }
         return permissions;
     }
