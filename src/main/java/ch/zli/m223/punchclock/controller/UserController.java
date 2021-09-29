@@ -31,6 +31,8 @@ public class UserController {
     @InitBinder("saveUserDto")
     public void setSaveUserDtoBinder(WebDataBinder binder){binder.setValidator(userValidator);}
 
+    /* This endpoint allows user with the ADMINISTRATE or SUPER_ADMINISTRATE
+    permission to get all users which they are allowed to access */
     @PreAuthorize("hasAnyAuthority('ADMINISTRATE', 'SUPER_ADMINISTRATE')")
     @RequestMapping(value = "/api/users", method = RequestMethod.GET)
     public List<ReturnUserDto> getUsers(Principal principal){
@@ -46,6 +48,9 @@ public class UserController {
         return new ArrayList<>();
     }
 
+    /* This endpoint allows user with the ADMINISTRATE or SUPER_ADMINISTRATE
+    permission to create users which don't have higher permissions than themselves.
+     Administrators can also not create users outside their own company */
     @PreAuthorize("hasAnyAuthority('ADMINISTRATE', 'SUPER_ADMINISTRATE')")
     @RequestMapping(value = "/api/user", method = RequestMethod.POST)
     public ResponseEntity<?> createUser(@Valid @RequestBody SaveUserDto saveUserDto, Principal principal){
@@ -57,6 +62,9 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    /* This endpoint allows user with the ADMINISTRATE or SUPER_ADMINISTRATE
+    permission to edit users which don't have higher or the same permissions as themselves.
+     Administrators can also not edit users outside their own company */
     @PreAuthorize("hasAnyAuthority('ADMINISTRATE', 'SUPER_ADMINISTRATE')")
     @RequestMapping(value = "/api/user", method = RequestMethod.PUT)
     public ResponseEntity<?> updateUser(@Valid @RequestBody SaveUserDto saveUserDto, Principal principal){
@@ -69,6 +77,9 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    /* This endpoint allows user with the ADMINISTRATE or SUPER_ADMINISTRATE
+    permission to delete other users which don't have higher or the same permissions as themselves.
+     Administrators can also not delete users outside their own company */
     @PreAuthorize("hasAnyAuthority('ADMINISTRATE', 'SUPER_ADMINISTRATE')")
     @RequestMapping(value = "/api/user/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteUser(@PathVariable("id") Long id, Principal principal){

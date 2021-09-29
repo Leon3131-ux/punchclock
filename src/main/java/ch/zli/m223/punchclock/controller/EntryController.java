@@ -31,7 +31,7 @@ public class EntryController {
     @InitBinder("entryDto")
     public void setEntryDtoBinder(WebDataBinder binder){binder.setValidator(entryValidator);}
 
-
+    /* this endpoint allows a user to get all of his entries */
     @GetMapping("/api/entries")
     public List<EntryDto> getAllEntries(Principal principal) {
         User user = userService.getByUsernameOrElseThrow(principal.getName());
@@ -43,6 +43,7 @@ public class EntryController {
 
     }
 
+    /* this endpoint allows a user to create a new entry */
     @RequestMapping(value = "/api/entry", method = RequestMethod.POST)
     public ResponseEntity<?> createEntry(@Valid @RequestBody EntryDto entryDto, Principal principal){
         User user = userService.getByUsernameOrElseThrow(principal.getName());
@@ -53,6 +54,7 @@ public class EntryController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    /* this endpoint allows a user to edit an existing entry */
     @RequestMapping(value = "/api/entry", method = RequestMethod.PUT)
     public ResponseEntity<?> updateEntry(@Valid @RequestBody EntryDto entryDto, Principal principal){
         User user = userService.getByUsernameOrElseThrow(principal.getName());
@@ -66,6 +68,7 @@ public class EntryController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    /* this endpoint allows a user to delete an existing entry */
     @RequestMapping(value = "/api/entry/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteEntry(@PathVariable("id") Long id, Principal principal){
         User user = userService.getByUsernameOrElseThrow(principal.getName());

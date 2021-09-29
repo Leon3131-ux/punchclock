@@ -27,12 +27,18 @@ public class CompanyController {
     @InitBinder("companyDto")
     public void setCompanyDtoBinder(WebDataBinder binder){binder.setValidator(companyValidator);}
 
+    /* this endpoint allows users with the SUPER_ADMINISTRATE
+    permission to get all companies
+     */
     @PreAuthorize("hasAnyAuthority('SUPER_ADMINISTRATE')")
     @RequestMapping(value = "/api/companies", method = RequestMethod.GET)
     public List<CompanyDto> getCompanies(){
         return companyDtoConverter.convertAll(companyService.getCompanies());
     }
 
+    /* this endpoint allows users with the SUPER_ADMINISTRATE
+    permission to create a new company
+     */
     @PreAuthorize("hasAnyAuthority('SUPER_ADMINISTRATE')")
     @RequestMapping(value = "/api/company", method = RequestMethod.POST)
     public ResponseEntity<?> createCompany(@Valid @RequestBody CompanyDto companyDto){
@@ -43,6 +49,9 @@ public class CompanyController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    /* this endpoint allows users with the SUPER_ADMINISTRATE
+    permission to edit an existing company
+     */
     @PreAuthorize("hasAnyAuthority('SUPER_ADMINISTRATE')")
     @RequestMapping(value = "/api/company", method = RequestMethod.PUT)
     public ResponseEntity<?> updateCompany(@Valid @RequestBody CompanyDto companyDto){
@@ -54,6 +63,9 @@ public class CompanyController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    /* this endpoint allows users with the SUPER_ADMINISTRATE
+    permission to delete an existing company
+     */
     @PreAuthorize("hasAnyAuthority('SUPER_ADMINISTRATE')")
     @RequestMapping(value = "/api/company/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteCompany(@PathVariable("id") Long id){
