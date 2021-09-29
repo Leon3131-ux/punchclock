@@ -33,7 +33,7 @@ public class UserValidator implements Validator {
             }
         }else{
             if (dto.getSavePassword() == null || dto.getSavePassword().isBlank()){
-                errors.rejectValue("password", "errors.user.password.blank");
+                errors.rejectValue("savePassword", "errors.user.savePassword.blank");
             }
         }
 
