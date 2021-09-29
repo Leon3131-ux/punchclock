@@ -6,6 +6,7 @@ import ch.zli.m223.punchclock.domain.User;
 import ch.zli.m223.punchclock.repository.PermissionRepository;
 import ch.zli.m223.punchclock.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -22,12 +23,17 @@ public class InitDb {
     private final UserRepository userRepository;
     private final PermissionRepository permissionRepository;
 
+    @Value("${db.initialize}")
+    private boolean initialize;
+
     @PostConstruct
     public void initDb(){
-        List<Permission> permissions = initPermissions();
-        initSuperAdmin(permissions);
-        initAdmin(permissions);
-        initUser();
+        if(initialize){
+            List<Permission> permissions = initPermissions();
+            initSuperAdmin(permissions);
+            initAdmin(permissions);
+            initUser();
+        }
     }
 
     private void initSuperAdmin(List<Permission> permissions){

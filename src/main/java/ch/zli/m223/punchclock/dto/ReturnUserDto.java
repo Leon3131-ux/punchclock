@@ -7,11 +7,11 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class UserDto {
+public class ReturnUserDto {
 
     private Long id;
     private String username;
-    private String savePassword;
     private List<PermissionDto> permissions;
+    private CompanyDto company;
 
 }

@@ -12,6 +12,6 @@ public class EntryDto {
     private Long id;
     private LocalDateTime checkIn;
     private LocalDateTime checkOut;
-    private UserDto user;
+    private ReturnUserDto user;
 
 }

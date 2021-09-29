@@ -14,10 +14,14 @@ import java.util.stream.Collectors;
 public class CompanyDtoConverter {
 
     public CompanyDto toDto(Company company){
-        return new CompanyDto(
-                company.getId(),
-                company.getName()
-        );
+        if(company != null){
+            return new CompanyDto(
+                    company.getId(),
+                    company.getName()
+            );
+        }
+        return null;
+
     }
 
     public Company toEntity(CompanyDto companyDto){
