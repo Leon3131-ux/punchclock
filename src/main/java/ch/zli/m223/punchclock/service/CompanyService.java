@@ -5,6 +5,7 @@ import ch.zli.m223.punchclock.repository.CompanyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,7 @@ import java.util.Optional;
 public class CompanyService {
 
     private final CompanyRepository companyRepository;
+    private final UserService userService;
 
     public Company createCompany(Company company){
         return companyRepository.saveAndFlush(company);
@@ -23,7 +25,9 @@ public class CompanyService {
         return companyRepository.saveAndFlush(oldCompany);
     }
 
+    @Transactional
     public void deleteCompany(Company company){
+        company.getUsers().forEach(userService::deleteUser);
         companyRepository.delete(company);
     }
 

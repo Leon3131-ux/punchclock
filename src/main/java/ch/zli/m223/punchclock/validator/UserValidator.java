@@ -42,10 +42,9 @@ public class UserValidator implements Validator {
             if(userWithSameName.isPresent() && !Objects.equals(userWithSameName.get().getId(), dto.getId())){
                 errors.rejectValue("username", "errors.user.username.invalid");
             }
-        }else {
+        }else if(dto.getUsername() == null || dto.getUsername().isBlank()){
             errors.rejectValue("username", "errors.user.username.blank");
         }
-
 
     }
 }

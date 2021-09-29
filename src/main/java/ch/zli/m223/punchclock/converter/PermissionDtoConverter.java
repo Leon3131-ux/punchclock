@@ -6,7 +6,9 @@ import ch.zli.m223.punchclock.repository.PermissionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -21,9 +23,8 @@ public class PermissionDtoConverter {
         );
     }
 
-    public Permission toEntity(PermissionDto permissionDto){
-        Optional<Permission> permission = permissionRepository.findById(permissionDto.getId());
-        return permission.orElse(null);
+    public List<PermissionDto> convertAll(List<Permission> permissions){
+        return permissions.stream().map(this::toDto).collect(Collectors.toList());
     }
 
 }

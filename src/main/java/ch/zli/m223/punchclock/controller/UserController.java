@@ -75,7 +75,7 @@ public class UserController {
         User user = userService.getByUsernameOrElseThrow(principal.getName());
         Optional<User> oldUser = userService.getById(id);
         if(oldUser.isPresent() && userService.isAllowedToDelete(oldUser.get(), user)){
-            userService.deleteUser(user);
+            userService.deleteUser(oldUser.get());
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

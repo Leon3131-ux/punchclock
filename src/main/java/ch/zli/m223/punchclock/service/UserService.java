@@ -3,11 +3,13 @@ package ch.zli.m223.punchclock.service;
 import ch.zli.m223.punchclock.domain.Company;
 import ch.zli.m223.punchclock.domain.PermissionName;
 import ch.zli.m223.punchclock.domain.User;
+import ch.zli.m223.punchclock.repository.EntryRepository;
 import ch.zli.m223.punchclock.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -18,6 +20,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final EntryRepository entryRepository;
 
     public User getByUsernameOrElseThrow(String username){
         return userRepository.findByUsername(username).orElseThrow();
@@ -45,7 +48,9 @@ public class UserService {
         return userRepository.saveAndFlush(oldUser);
     }
 
+    @Transactional
     public void deleteUser(User user){
+        entryRepository.deleteAllByUser(user);
         userRepository.delete(user);
     }
 
@@ -94,7 +99,7 @@ public class UserService {
                 return oldUser.getPermissions().containsAll(newUser.getPermissions());
             }
         }
-        return false;
+        return true;
     }
 
 }

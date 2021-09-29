@@ -8,5 +8,7 @@ import java.util.List;
 
 public interface EntryRepository extends JpaRepository<Entry, Long> {
 
-    List<Entry> findAllByUser(User user);
+    List<Entry> findAllByUserOrderById(User user);
+
+    void deleteAllByUser(User user);
 }

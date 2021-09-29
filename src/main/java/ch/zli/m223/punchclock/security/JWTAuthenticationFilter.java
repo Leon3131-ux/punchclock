@@ -42,7 +42,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain,
-                                            Authentication auth) throws IOException {
+                                            Authentication auth) {
 
         User user = (User) auth.getPrincipal();
 
@@ -59,10 +59,10 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         //res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
 
+        res.addHeader("Access-Control-Expose-Headers", "Authorization");
+        res.addHeader("Access-Control-Allow-Headers", "Authorization, X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept, X-Custom-header");
+        res.addHeader("Authorization", SecurityConstants.TOKEN_PREFIX + token);
         res.addHeader("Content-Type", "application/json");
-        res.getWriter().write(token);
-        res.getWriter().flush();
-        res.getWriter().close();
 
     }
 

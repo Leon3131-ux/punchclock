@@ -38,6 +38,9 @@ public class EntryValidator implements Validator {
             }else if(dto.getCheckOut().isBefore(dto.getCheckIn())){
                 errors.rejectValue("checkOut", "errors.entry.checkOut.invalid");
             }
+        }else if(dto.getCheckIn() == null && dto.getCheckOut() == null){
+            errors.rejectValue("checkOut", "errors.entry.checkOut.invalid");
+            errors.rejectValue("checkIn", "errors.entry.checkIn.invalid");
         }
     }
 }

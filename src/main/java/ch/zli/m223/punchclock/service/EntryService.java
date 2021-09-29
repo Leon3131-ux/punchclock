@@ -36,7 +36,7 @@ public class EntryService {
     }
 
     public List<Entry> getAllByUser(User user){
-        return entryRepository.findAllByUser(user);
+        return entryRepository.findAllByUserOrderById(user);
     }
 
     public Optional<Entry> getById(Long id){

@@ -48,7 +48,7 @@ public class InitDb {
             User user = new User(
                     0L,
                     "superadmin",
-                    bCryptPasswordEncoder.encode("superadmin"),
+                    bCryptPasswordEncoder.encode("1"),
                     null,
                     List.of(superAdminPermission.get())
             );
@@ -68,7 +68,7 @@ public class InitDb {
             User user = new User(
                     0L,
                     "admin",
-                    bCryptPasswordEncoder.encode("admin"),
+                    bCryptPasswordEncoder.encode("1"),
                     null,
                     List.of(adminPermission.get())
             );
@@ -80,7 +80,7 @@ public class InitDb {
         User user = new User(
                 0L,
                 "user",
-                bCryptPasswordEncoder.encode("user"),
+                bCryptPasswordEncoder.encode("1"),
                 null,
                 new ArrayList<>()
         );
